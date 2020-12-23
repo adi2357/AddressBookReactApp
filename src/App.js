@@ -1,10 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
+import AddressBookForm from "./components/address-book-form/address-book-form";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route, Redirect
+} from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-     <h2>Hello World!</h2>
+     <Router>
+        <Switch>
+          <Route exact path = "/address-book-form"><AddressBookForm /></Route>
+        </Switch>
+      </Router>
     </div>
   );
 }
