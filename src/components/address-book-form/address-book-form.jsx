@@ -3,6 +3,7 @@ import './address-book-form.scss';
 import logo from '../../assets/images/logo.png';
 import cross from '../../assets/images/cross.png'
 import {Link, withRouter} from 'react-router-dom';
+import AddressBookService from '../../services/address-book-service'; 
 
 const initialState = {
   fullName: '',
@@ -171,6 +172,7 @@ this.state = {
       }
     }
   }
+
   checkGlobalError = () =>{
     if(this.state.error.fullName.length === 0 && this.state.error.address.length === 0 && this.state.error.city.length === 0 
       && this.state.error.state.length === 0 && this.state.error.zip.length === 0 && this.state.error.phoneNumber.length === 0) {
@@ -179,7 +181,46 @@ this.state = {
         this.setState({isError: true});
       }
   }
+
+  checkValidations = async () => {
+    await this.checkName(this.state.fullName);
+    await this.checkAddress(this.state.address);
+    await this.checkSelect('city',this.state.city);
+    await this.checkSelect('state',this.state.state);
+    await this.checkZip(this.state.zip);
+    await this.checkPhoneNumber(this.state.phoneNumber);
+    await this.checkGlobalError();
+    return (this.state.isError);
+  }
   save = async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    saveOperation: {         
+      if(await this.checkValidations()) {
+        let errorLog = JSON.stringify(this.state.error);
+        alert("Error Occured while Submitting the Form ==> ERROR LOG : " + errorLog);
+        break saveOperation;
+      }    
+      let contactObject = {
+        id: this.state.id,
+        fullName: this.state.fullName,
+        address: this.state.address,
+        city: this.state.city,
+        state: this.state.state,
+        zip: this.state.zip,
+        phoneNumber: this.state.phoneNumber
+      }
+      new AddressBookService().addContact(contactObject)
+      .then(responseDTO => {
+        let responseText = responseDTO.data;
+        alert("Contact Added Successfully!!!\n" + JSON.stringify(responseText.data));
+        this.reset();
+      }).catch(error => {
+        console.log("Error while adding Contact!!!\n" + JSON.stringify(error));
+      });
+      this.reset();
+    }
   }
 
   reset = () => {
