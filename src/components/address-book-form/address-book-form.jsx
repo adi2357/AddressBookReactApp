@@ -216,6 +216,7 @@ this.state = {
         let responseText = responseDTO.data;
         alert("Contact Added Successfully!!!\n" + JSON.stringify(responseText.data));
         this.reset();
+        this.props.history.push("/home");
       }).catch(error => {
         console.log("Error while adding Contact!!!\n" + JSON.stringify(error));
       });
@@ -276,7 +277,7 @@ this.state = {
                         <label htmlFor="city" className="label text">City</label>
                         <div className="validity-check">
                           <select name="city" id="city" value={this.state.city} onChange={this.cityChangeHandler}>
-                            <option value="" disabled selected hidden>Select City</option>
+                            <option value="" hidden>Select City</option>
                             <option value="Lucknow">Lucknow</option>
                             <option value="Mumbai">Mumbai</option>
                             <option value="Bhopal">Bhopal</option>
@@ -289,7 +290,7 @@ this.state = {
                         <label htmlFor="state" className="label text">State</label>
                         <div className="validity-check">
                           <select name="state" id="state" value={this.state.state} onChange={this.stateChangeHandler}>
-                            <option value="" disabled selected hidden>Select State</option>
+                            <option value="" hidden>Select State</option>
                             <option value="Uttar Pradesh">Uttar Pradesh</option>
                             <option value="Maharashtra">Maharashtra</option>
                             <option value="Madhya Pradesh">Madhya Pradesh</option>
